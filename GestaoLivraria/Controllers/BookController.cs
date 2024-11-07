@@ -4,15 +4,13 @@ using GestaoLivraria.Models.Enums;
 
 using Microsoft.AspNetCore.Mvc;
 
-using static System.Reflection.Metadata.BlobBuilder;
-
 namespace GestaoLivraria.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
     public class BookController : ControllerBase
     {
-        public static List<Book> _books = new List<Book>();
+        private List<Book> _books = new List<Book>();
 
         [HttpGet]
         [Route("{id}")]
