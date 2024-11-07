@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel;
 using System.Reflection;
 
-namespace GestaoLivraria
+namespace GestaoLivraria.Helpers
 {
     public static class EnumHelper
     {

@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel;
 
-namespace GestaoLivraria
+namespace GestaoLivraria.Models.Entities
 {
     public class Book
     {
@@ -15,19 +15,5 @@ namespace GestaoLivraria
         public string Price { get; set; }
 
         public int QuantityInStock { get; set; }
-    }
-
-    public enum GenderEnum
-    {
-        [Description("Ficção")]
-        ficcao = 0,
-        [Description("Romance")]
-        romance = 1,
-        [Description("Mistério")]
-        misterio = 2,
-        [Description("Drama")]
-        drama = 3,
-        [Description("Ação")]
-        acao = 4
     }
 }

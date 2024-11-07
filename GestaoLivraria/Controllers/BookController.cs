@@ -1,4 +1,10 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using GestaoLivraria.Helpers;
+using GestaoLivraria.Models.Entities;
+using GestaoLivraria.Models.Enums;
+
+using Microsoft.AspNetCore.Mvc;
+
+using static System.Reflection.Metadata.BlobBuilder;
 
 namespace GestaoLivraria.Controllers
 {
@@ -8,9 +14,25 @@ namespace GestaoLivraria.Controllers
     {
         public static List<Book> _books = new List<Book>();
 
+        [HttpGet]
+        [Route("{id}")]
+        [ProducesResponseType(typeof(Book), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(Book), StatusCodes.Status400BadRequest)]
+
+        public IActionResult GetById([FromRoute] int id)
+        {
+            Book? bookToGet = _books.FirstOrDefault(b => b.Id == id);
+
+            if (bookToGet != null)
+            {
+                return Ok(bookToGet);
+            }
+
+            return NotFound(new { Message = "Livro não encontrado." });
+        }
+
         [HttpGet("GetAll")]
         [ProducesResponseType(typeof(Book), StatusCodes.Status200OK)]
-        [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
         public IActionResult GetAll()
         {
             return Ok(_books);
@@ -18,13 +40,60 @@ namespace GestaoLivraria.Controllers
 
         [HttpPost]
         [ProducesResponseType(typeof(Book), StatusCodes.Status201Created)]
-        public IActionResult Post()
+        public IActionResult Create()
         {
-            Book book = new Book() { Id = 1, Title = "Teste2", Author = "Autor2", Gender = GenderEnum.romance.GetEnumDescription(), Price = "2.00", QuantityInStock = 2 };
+            int count = _books.Count + 1;
+
+            Book book = new()
+            {
+                Id = count,
+                Title = "Teste2",
+                Author = "Autor2",
+                Gender = EnumGender.romance.GetEnumDescription(),
+                Price = "2.00",
+                QuantityInStock = 2
+            };
 
             _books.Add(book);
 
             return Created(string.Empty, book);
+        }
+
+        [HttpPut]
+        [Route("{id}")]
+        [ProducesResponseType(typeof(Book), StatusCodes.Status204NoContent)]
+        public IActionResult Update([FromRoute] int id, [FromBody] Book book)
+        {
+            Book? bookToUpdate = _books.FirstOrDefault(b => b.Id == id);
+
+            if (bookToUpdate != null)
+            {
+                bookToUpdate.Title = book.Title;
+                bookToUpdate.Author = book.Author;
+                bookToUpdate.Price = book.Price;
+                bookToUpdate.QuantityInStock = book.QuantityInStock;
+
+                return NoContent();
+            }
+
+            return NotFound(new { Message = "Livro não encontrado." });
+        }
+
+        [HttpDelete]
+        [Route("{id}")]
+        [ProducesResponseType(typeof(Book), StatusCodes.Status204NoContent)]
+        public IActionResult Delete([FromRoute] int id)
+        {
+            Book? bookToDelete = _books.FirstOrDefault(b => b.Id == id);
+
+            if (bookToDelete != null)
+            {
+                _books.Remove(bookToDelete);
+
+                return NoContent();
+            }
+
+            return NotFound(new { Message = "Livro não encontrado." });
         }
     }
 }
