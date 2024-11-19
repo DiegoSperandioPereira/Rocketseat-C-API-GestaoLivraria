@@ -10,7 +10,7 @@ namespace GestaoLivraria.Controllers
     [ApiController]
     public class BookController : ControllerBase
     {
-        private List<Book> _books = new List<Book>();
+        private static List<Book> _books = new List<Book>();
 
         [HttpGet]
         [Route("{id}")]
